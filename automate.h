@@ -4,13 +4,15 @@
 #include <string>
 #include <vector>
 #include "lexer.h"
-#include "etat.h"
 #include "symbole.h"
+
+// Déclaration anticipée de la classe Etat
+class Etat;
 
 class Automate
 {
 public:
-    Automate(string flux);
+    Automate(std::string flux);
     ~Automate();
     void evaluer();
     void decalage(Symbole *s, Etat *e);
@@ -22,8 +24,8 @@ public:
     void popEtDetruireSymbole();
 
 private:
-    vector<Symbole *> pileSymboles;
-    vector<Etat *> pileEtats;
+    std::vector<Symbole *> pileSymboles;
+    std::vector<Etat *> pileEtats;
     Lexer *lexer;
     Symbole *symboleCourant;
 };

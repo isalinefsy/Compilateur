@@ -5,6 +5,7 @@
 
 using namespace std;
 
+Etat::~Etat() {}
 Etat0::Etat0() : Etat("E0") {}
 Etat1::Etat1() : Etat("E1") {}
 Etat2::Etat2() : Etat("E2") {}
@@ -91,17 +92,8 @@ bool Etat3::transition(Automate &automate, Symbole *s)
     switch (*s)
     {
     case PLUS:
-        // E -> val
-        automate.reduction(1, s);
-        break;
     case MULT:
-        // E -> val
-        automate.reduction(1, s);
-        break;
     case CLOSEPAR:
-        // E -> val
-        automate.reduction(1, s);
-        break;
     case FIN:
         // E -> val
         automate.reduction(1, s);
@@ -175,28 +167,19 @@ bool Etat6::transition(Automate &automate, Symbole *s)
 
 bool Etat7::transition(Automate &automate, Symbole *s)
 {
+    Expr *s1, *s2;
     switch (*s)
     {
     case PLUS:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
+    case CLOSEPAR:
+    case FIN:
+        s1 = (Expr *)automate.popSymbole();
+        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
+        s2 = (Expr *)automate.popSymbole();
         automate.reduction(3, new ExprPlus(s1, s2));
         break;
     case MULT:
         automate.decalage(s, new Etat5);
-        break;
-    case CLOSEPAR:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprPlus(s1, s2));
-        break;
-    case FIN:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprPlus(s1, s2));
         break;
     default:
         cout << "Erreur de syntaxe" << endl;
@@ -207,30 +190,16 @@ bool Etat7::transition(Automate &automate, Symbole *s)
 
 bool Etat8::transition(Automate &automate, Symbole *s)
 {
+    Expr *s1, *s2;
     switch (*s)
     {
     case PLUS:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprMult(s1, s2));
-        break;
     case MULT:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprMult(s1, s2));
-        break;
     case CLOSEPAR:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprMult(s1, s2));
-        break;
     case FIN:
-        Expr *s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole();
-        Expr *s2 = (Expr *)automate.popSymbole();
+        s1 = (Expr *)automate.popSymbole();
+        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
+        s2 = (Expr *)automate.popSymbole();
         automate.reduction(3, new ExprMult(s1, s2));
         break;
     default:
@@ -242,34 +211,15 @@ bool Etat8::transition(Automate &automate, Symbole *s)
 
 bool Etat9::transition(Automate &automate, Symbole *s)
 {
+    Expr *expr;
     switch (*s)
     {
     case PLUS:
-        // E -> (E)
-        Expr *expr = (Expr *)automate.popSymbole(); // Récupérer l'expression `E`
-        automate.popEtDetruireSymbole();            // Supprimer `(` (OPENPAR)
-        // Effectuer la réduction : (E) devient E
-        automate.reduction(3, expr);
-        break;
     case MULT:
-        // E -> (E)
-        Expr *expr = (Expr *)automate.popSymbole(); // Récupérer l'expression `E`
-        automate.popEtDetruireSymbole();            // Supprimer `(` (OPENPAR)
-        // Effectuer la réduction : (E) devient E
-        automate.reduction(3, expr);
-        break;
     case CLOSEPAR:
-        // E -> (E)
-        Expr *expr = (Expr *)automate.popSymbole(); // Récupérer l'expression `E`
-        automate.popEtDetruireSymbole();            // Supprimer `(` (OPENPAR)
-        // Effectuer la réduction : (E) devient E
-        automate.reduction(3, expr);
-        break;
     case FIN:
-        // E -> (E)
-        Expr *expr = (Expr *)automate.popSymbole(); // Récupérer l'expression `E`
-        automate.popEtDetruireSymbole();            // Supprimer `(` (OPENPAR)
-        // Effectuer la réduction : (E) devient E
+        expr = (Expr *)automate.popSymbole();
+        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
         automate.reduction(3, expr);
         break;
     default:

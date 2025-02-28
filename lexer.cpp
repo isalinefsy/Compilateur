@@ -5,7 +5,7 @@ Symbole *Lexer::Consulter()
    if (!tampon)
    {
 
-      if (tete == flux.length())
+      if ((unsigned long)tete == flux.length())
          tampon = new Symbole(FIN);
       else
       {

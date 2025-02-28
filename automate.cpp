@@ -1,5 +1,6 @@
 #include "automate.h"
 #include <iostream>
+#include "etat.h" // Include the header file where Etat0 is defined
 
 using namespace std;
 
@@ -51,10 +52,15 @@ void Automate::evaluer()
     }
 
     cout << "Fin la lecture de l'expression" << endl;
-    for (int i = 0; i < pileSymboles.size(); ++i)
+    for (unsigned long i = 0; i < pileSymboles.size(); ++i)
     {
         pileSymboles[i]->Affiche();
     }
+}
+
+void Automate::accepter()
+{
+    cout << "L'expression est correcte" << endl;
 }
 
 Symbole *Automate::popSymbole()
@@ -74,5 +80,25 @@ void Automate::popEtDetruireSymbole()
     {
         delete pileSymboles.back(); // Libération de la mémoire
         pileSymboles.pop_back();
+    }
+}
+
+Automate::~Automate()
+{
+    // Libérer le lexer
+    delete lexer;
+
+    // Libérer la mémoire des symboles
+    while (!pileSymboles.empty())
+    {
+        delete pileSymboles.back();
+        pileSymboles.pop_back();
+    }
+
+    // Libérer la mémoire des états
+    while (!pileEtats.empty())
+    {
+        delete pileEtats.back();
+        pileEtats.pop_back();
     }
 }
