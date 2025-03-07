@@ -22,3 +22,7 @@ clean:
 	rm -f $(OBJ) $(EXEC)
 
 .PHONY: all clean
+
+tests: tests.cpp automate.o etat.o lexer.o symbole.o
+	g++ -Wall -Wextra -std=c++17 -g tests.cpp automate.o etat.o lexer.o symbole.o -o bin/tests
+	./bin/tests

@@ -254,14 +254,25 @@ bool Etat9::transition(Automate &automate, Symbole *s)
     case CLOSEPAR:
     case FIN:
     {
-        // On attend que la pile contienne : [ ... , OPENPAR, E, CLOSEPAR ]
-        // On retire d'abord le CLOSEPAR (qui est en haut)
+        if (automate.pileSymboles.size() < 3)
+        {
+            cout << "Erreur de syntaxe : parenthèse fermante manquante" << endl;
+            return false;
+        }
+
+        // Retire `CLOSEPAR` (qui devrait être en haut de la pile)
         automate.popEtDetruireSymbole();
-        // On récupère l'expression E (le symbole du milieu)
+        // Récupère l'expression à l'intérieur des parenthèses
         Expr *expr = (Expr *)automate.popSymbole();
-        // On retire l'OPENPAR
+        // Retire `OPENPAR` (il doit être là, sinon erreur)
+        if (automate.pileSymboles.empty() || *(automate.pileSymboles.back()) != OPENPAR)
+        {
+            cout << "Erreur de syntaxe : parenthèse ouvrante manquante" << endl;
+            return false;
+        }
         automate.popEtDetruireSymbole();
-        // La réduction transforme (E) en E
+
+        // Réduction : (E) devient juste E
         automate.reduction(3, expr);
         break;
     }
