@@ -37,6 +37,9 @@ bool Etat0::transition(Automate &automate, Symbole *s)
     case OPENPAR:
         automate.decalage(s, new Etat2);
         break;
+    case EXPR:
+        automate.transitionSimple(s, new Etat1);
+        break;
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;
@@ -56,7 +59,7 @@ bool Etat1::transition(Automate &automate, Symbole *s)
         break;
     case FIN:
         automate.accepter();
-        break;
+        return false; // On retourne false pour sortir de la boucle d'évaluation
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;
@@ -92,9 +95,19 @@ bool Etat3::transition(Automate &automate, Symbole *s)
     case MULT:
     case CLOSEPAR:
     case FIN:
-        // E -> val
-        automate.reduction(1, s);
+    {
+        // E -> val : conversion de l'entier en une expression
+        Entier *e = dynamic_cast<Entier *>(automate.popSymbole());
+        if (e == nullptr)
+        {
+            cout << "Erreur de conversion de l'entier en expression" << endl;
+            return false;
+        }
+        Expr *expr = new ExprEntier(e->getValeur());
+        delete e; // Libération de l'ancien symbole entier
+        automate.reduction(1, expr);
         break;
+    }
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;

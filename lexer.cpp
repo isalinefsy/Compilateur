@@ -57,6 +57,11 @@ void Lexer::Avancer()
    tampon = nullptr;
 }
 
+void Lexer::avancerSansSuppression()
+{
+   tampon = nullptr;
+}
+
 Lexer::~Lexer()
 {
    delete tampon;

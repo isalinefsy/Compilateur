@@ -51,6 +51,23 @@ public:
    virtual double eval(const map<string, double> &valeurs) const = 0;
 };
 
+class ExprEntier : public Expr
+{
+public:
+   ExprEntier(int v) : valeur(v) {}
+   double eval(const map<string, double> &valeurs) const override
+   {
+      return valeur;
+   }
+   void Affiche() override
+   {
+      cout << valeur;
+   }
+
+private:
+   int valeur;
+};
+
 class ExprPlus : public Expr
 {
 public:

@@ -39,8 +39,8 @@ void Automate::decalage(Symbole *s, Etat *e)
     pileSymboles.push_back(s);
     pileEtats.push_back(e);
 
-    // On avance le lexer pour lire le prochain symbole
-    lexer->Avancer();
+    // On avance le lexer sans supprimer le token transféré
+    lexer->avancerSansSuppression();
 }
 
 void Automate::transitionSimple(Symbole *s, Etat *e)
