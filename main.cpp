@@ -4,7 +4,7 @@
 
 int main(void)
 {
-   string chaine("1*2");
+   string chaine("(1+2)*6");
 
    Lexer l(chaine);
 

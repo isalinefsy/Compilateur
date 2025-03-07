@@ -177,18 +177,23 @@ bool Etat6::transition(Automate &automate, Symbole *s)
 
 bool Etat7::transition(Automate &automate, Symbole *s)
 {
-    Expr *s1, *s2;
     switch (*s)
     {
     case PLUS:
     case CLOSEPAR:
     case FIN:
-        if (automate.pileSymboles.size() >= 2) // Vérifie qu'il y a suffisamment d'éléments dans la pile
+    {
+        // On attend que la pile contienne : [ ... , E (gauche), PLUS, E (droite) ]
+        if (automate.pileSymboles.size() >= 3)
         {
-            s1 = (Expr *)automate.popSymbole();
-            automate.popEtDetruireSymbole(); // Supprime le symbole de la pile
-            s2 = (Expr *)automate.popSymbole();
-            automate.reduction(3, new ExprPlus(s1, s2)); // Réduction de E + E en E
+            // Récupérer d'abord le côté droit (qui est en haut de la pile)
+            Expr *right = (Expr *)automate.popSymbole();
+            // Retirer le symbole PLUS (en haut de la pile maintenant)
+            automate.popEtDetruireSymbole();
+            // Puis récupérer le côté gauche
+            Expr *left = (Expr *)automate.popSymbole();
+            // On reconstruit l'expression avec left et right dans le bon ordre
+            automate.reduction(3, new ExprPlus(left, right));
         }
         else
         {
@@ -196,6 +201,7 @@ bool Etat7::transition(Automate &automate, Symbole *s)
             return false;
         }
         break;
+    }
     case MULT:
         automate.decalage(s, new Etat5);
         break;
@@ -208,18 +214,30 @@ bool Etat7::transition(Automate &automate, Symbole *s)
 
 bool Etat8::transition(Automate &automate, Symbole *s)
 {
-    Expr *s1, *s2;
     switch (*s)
     {
     case PLUS:
     case MULT:
     case CLOSEPAR:
     case FIN:
-        s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
-        s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprMult(s1, s2));
+    {
+        if (automate.pileSymboles.size() >= 3)
+        {
+            // Récupérer d'abord le côté droit
+            Expr *right = (Expr *)automate.popSymbole();
+            // Retirer le symbole MULT
+            automate.popEtDetruireSymbole();
+            // Puis récupérer le côté gauche
+            Expr *left = (Expr *)automate.popSymbole();
+            automate.reduction(3, new ExprMult(left, right));
+        }
+        else
+        {
+            cout << "Erreur : pile insuffisante pour la réduction" << endl;
+            return false;
+        }
         break;
+    }
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;
@@ -229,17 +247,24 @@ bool Etat8::transition(Automate &automate, Symbole *s)
 
 bool Etat9::transition(Automate &automate, Symbole *s)
 {
-    Expr *expr;
     switch (*s)
     {
     case PLUS:
     case MULT:
     case CLOSEPAR:
     case FIN:
-        expr = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
+    {
+        // On attend que la pile contienne : [ ... , OPENPAR, E, CLOSEPAR ]
+        // On retire d'abord le CLOSEPAR (qui est en haut)
+        automate.popEtDetruireSymbole();
+        // On récupère l'expression E (le symbole du milieu)
+        Expr *expr = (Expr *)automate.popSymbole();
+        // On retire l'OPENPAR
+        automate.popEtDetruireSymbole();
+        // La réduction transforme (E) en E
         automate.reduction(3, expr);
         break;
+    }
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;

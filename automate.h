@@ -11,6 +11,10 @@ class Etat;
 
 class Automate
 {
+
+private:
+    bool expressionAcceptee;
+
 public:
     Automate(std::string flux);
     ~Automate();
@@ -20,6 +24,8 @@ public:
     void transitionSimple(Symbole *s, Etat *e);
     void calcul();
     void accepter();
+    void setExpressionAcceptee(bool status) { expressionAcceptee = status; }
+    bool isExpressionAcceptee() const { return expressionAcceptee; }
     void lancerProg();
     Symbole *popSymbole();
     void popEtDetruireSymbole();

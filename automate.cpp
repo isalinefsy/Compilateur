@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Automate::Automate(string flux) : lexer(new Lexer(flux))
+Automate::Automate(string flux) : lexer(new Lexer(flux)), expressionAcceptee(false)
 {
     Etat *etat0 = new Etat0();
     pileEtats.push_back(etat0);
@@ -81,7 +81,6 @@ void Automate::evaluer()
 
         cout << "Etat actuel : " << pileEtats.back()->etat() << endl;
 
-        // Affiche l'état de la pile des symboles
         cout << "Pile des symboles : ";
         for (Symbole *s : pileSymboles)
         {
@@ -90,7 +89,6 @@ void Automate::evaluer()
         }
         cout << endl;
 
-        // Affiche l'état de la pile des états
         cout << "Pile des états : ";
         for (Etat *e : pileEtats)
         {
@@ -100,18 +98,20 @@ void Automate::evaluer()
 
         retourTransition = pileEtats.back()->transition(*this, symbole);
 
-        if (!retourTransition)
+        if (!retourTransition && !isExpressionAcceptee())
         {
             cout << "Erreur de syntaxe, arrêt de l'automate." << endl;
-            break; // Arrête la boucle en cas d'erreur
+            break;
         }
     }
 
     cout << "Fin de la lecture de l'expression" << endl;
 }
+
 void Automate::accepter()
 {
     cout << "L'expression est correcte" << endl;
+    expressionAcceptee = true; // Marque l'expression comme acceptée
 }
 
 Symbole *Automate::popSymbole()
