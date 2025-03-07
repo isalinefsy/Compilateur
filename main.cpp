@@ -1,6 +1,9 @@
 #include <iostream>
 #include "lexer.h"
 #include "automate.h"
+#include <unistd.h>
+
+using namespace std;
 
 int main(void)
 {
@@ -16,8 +19,9 @@ int main(void)
       l.Avancer();
    }
 
-   Automate *a = new Automate(chaine);
-   a->lancerProg();
+   Automate a(chaine);
+   a.lancerProg();
 
+   sleep(100);
    return 0;
 }

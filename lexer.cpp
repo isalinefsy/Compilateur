@@ -29,11 +29,12 @@ Symbole *Lexer::Consulter()
             tete++;
             break;
          default:
-            if (flux[tete] <= '9' && flux[tete] >= '0')
+            if (flux[tete] >= '0' && flux[tete] <= '9')
             {
                int resultat = flux[tete] - '0';
                int i = 1;
-               while (flux[tete + i] <= '9' && flux[tete + i] >= '0')
+               while (static_cast<size_t>(tete + i) < flux.size() &&
+                      flux[tete + i] >= '0' && flux[tete + i] <= '9')
                {
                   resultat = resultat * 10 + (flux[tete + i] - '0');
                   i++;

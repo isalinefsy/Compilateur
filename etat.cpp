@@ -183,16 +183,21 @@ bool Etat7::transition(Automate &automate, Symbole *s)
     case CLOSEPAR:
     case FIN:
     {
-        // On attend que la pile contienne : [ ... , E (gauche), PLUS, E (droite) ]
         if (automate.pileSymboles.size() >= 3)
         {
-            // Récupérer d'abord le côté droit (qui est en haut de la pile)
-            Expr *right = (Expr *)automate.popSymbole();
-            // Retirer le symbole PLUS (en haut de la pile maintenant)
+            Expr *right = dynamic_cast<Expr *>(automate.popSymbole());
+            if (!right)
+            {
+                cout << "Erreur: Cast de symbole en Expr échoué (right)" << endl;
+                return false;
+            }
             automate.popEtDetruireSymbole();
-            // Puis récupérer le côté gauche
-            Expr *left = (Expr *)automate.popSymbole();
-            // On reconstruit l'expression avec left et right dans le bon ordre
+            Expr *left = dynamic_cast<Expr *>(automate.popSymbole());
+            if (!left)
+            {
+                cout << "Erreur: Cast de symbole en Expr échoué (left)" << endl;
+                return false;
+            }
             automate.reduction(3, new ExprPlus(left, right));
         }
         else
@@ -224,11 +229,21 @@ bool Etat8::transition(Automate &automate, Symbole *s)
         if (automate.pileSymboles.size() >= 3)
         {
             // Récupérer d'abord le côté droit
-            Expr *right = (Expr *)automate.popSymbole();
+            Expr *right = dynamic_cast<Expr *>(automate.popSymbole());
+            if (!right)
+            {
+                cout << "Erreur: Cast de symbole en Expr échoué (right)" << endl;
+                return false;
+            }
             // Retirer le symbole MULT
             automate.popEtDetruireSymbole();
             // Puis récupérer le côté gauche
-            Expr *left = (Expr *)automate.popSymbole();
+            Expr *left = dynamic_cast<Expr *>(automate.popSymbole());
+            if (!left)
+            {
+                cout << "Erreur: Cast de symbole en Expr échoué (left)" << endl;
+                return false;
+            }
             automate.reduction(3, new ExprMult(left, right));
         }
         else
@@ -263,7 +278,12 @@ bool Etat9::transition(Automate &automate, Symbole *s)
         // Retire `CLOSEPAR` (qui devrait être en haut de la pile)
         automate.popEtDetruireSymbole();
         // Récupère l'expression à l'intérieur des parenthèses
-        Expr *expr = (Expr *)automate.popSymbole();
+        Expr *expr = dynamic_cast<Expr *>(automate.popSymbole());
+        if (!expr)
+        {
+            cout << "Erreur: Cast de symbole en Expr échoué (expr)" << endl;
+            return false;
+        }
         // Retire `OPENPAR` (il doit être là, sinon erreur)
         if (automate.pileSymboles.empty() || *(automate.pileSymboles.back()) != OPENPAR)
         {

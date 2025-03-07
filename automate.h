@@ -5,8 +5,8 @@
 #include <vector>
 #include "lexer.h"
 #include "symbole.h"
+using namespace std;
 
-// Déclaration anticipée de la classe Etat
 class Etat;
 
 class Automate
@@ -16,7 +16,7 @@ private:
     bool expressionAcceptee;
 
 public:
-    Automate(std::string flux);
+    Automate(string flux);
     ~Automate();
     void evaluer();
     void decalage(Symbole *s, Etat *e);
@@ -30,8 +30,8 @@ public:
     Symbole *popSymbole();
     void popEtDetruireSymbole();
 
-    std::vector<Symbole *> pileSymboles;
-    std::vector<Etat *> pileEtats;
+    vector<Symbole *> pileSymboles;
+    vector<Etat *> pileEtats;
     Lexer *lexer;
     Symbole *symboleCourant;
 };
