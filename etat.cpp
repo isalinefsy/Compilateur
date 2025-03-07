@@ -37,9 +37,6 @@ bool Etat0::transition(Automate &automate, Symbole *s)
     case OPENPAR:
         automate.decalage(s, new Etat2);
         break;
-    case EXPR:
-        automate.transitionSimple(s, new Etat1);
-        break;
     default:
         cout << "Erreur de syntaxe" << endl;
         return false;
@@ -173,10 +170,18 @@ bool Etat7::transition(Automate &automate, Symbole *s)
     case PLUS:
     case CLOSEPAR:
     case FIN:
-        s1 = (Expr *)automate.popSymbole();
-        automate.popEtDetruireSymbole(); // Assurez-vous que cette fonction appelle 'delete' pour supprimer les objets
-        s2 = (Expr *)automate.popSymbole();
-        automate.reduction(3, new ExprPlus(s1, s2));
+        if (automate.pileSymboles.size() >= 2) // Vérifie qu'il y a suffisamment d'éléments dans la pile
+        {
+            s1 = (Expr *)automate.popSymbole();
+            automate.popEtDetruireSymbole(); // Supprime le symbole de la pile
+            s2 = (Expr *)automate.popSymbole();
+            automate.reduction(3, new ExprPlus(s1, s2)); // Réduction de E + E en E
+        }
+        else
+        {
+            cout << "Erreur : pile insuffisante pour la réduction" << endl;
+            return false;
+        }
         break;
     case MULT:
         automate.decalage(s, new Etat5);

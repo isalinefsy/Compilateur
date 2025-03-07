@@ -20,10 +20,10 @@ public:
     void transitionSimple(Symbole *s, Etat *e);
     void calcul();
     void accepter();
+    void lancerProg();
     Symbole *popSymbole();
     void popEtDetruireSymbole();
 
-private:
     std::vector<Symbole *> pileSymboles;
     std::vector<Etat *> pileEtats;
     Lexer *lexer;

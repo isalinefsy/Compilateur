@@ -26,6 +26,7 @@ public:
    virtual ~Symbole() {}
    operator int() const { return ident; }
    virtual void Affiche();
+   int getType() const { return ident; } // Ajout de la méthode getType
 
 protected:
    int ident;
@@ -37,11 +38,11 @@ public:
    Entier(int v) : Symbole(INT), valeur(v) {}
    ~Entier() {}
    virtual void Affiche();
+   int getValeur() const { return valeur; } // Ajout de la méthode getValeur
 
 protected:
    int valeur;
 };
-
 class Expr : public Symbole
 {
 public:
