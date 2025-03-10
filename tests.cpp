@@ -2,21 +2,21 @@
 #include "automate.h"
 using namespace std;
 
-void runTest(string expression, double expectedValue, bool shouldFail = false)
+void executerTest(string expression, double valeurAttendue, bool doitEchouer = false)
 {
     cout << "\n=========================\n";
-    cout << "Testing: " << expression << endl;
+    cout << "Test en cours: " << expression << endl;
 
     Automate automate(expression);
     automate.lancerProg();
 
-    if (shouldFail)
+    if (doitEchouer)
     {
-        cout << "EXPECTED: Syntax error\n";
+        cout << "ATTENDU: Erreur de syntaxe\n";
     }
     else
     {
-        cout << "EXPECTED: " << expectedValue << endl;
+        cout << "ATTENDU: " << valeurAttendue << endl;
     }
     cout << "=========================\n";
 }
@@ -24,20 +24,22 @@ void runTest(string expression, double expectedValue, bool shouldFail = false)
 int main()
 {
     // Tests valides
-    runTest("3+5", 8);
-    runTest("2*3", 6);
-    runTest("(1+2)*6", 18);
-    runTest("3+(4*2)", 11);
-    runTest("(4+2)*(6+1)", 42);
+    executerTest("3+5", 8);
+    executerTest("2*3", 6);
+    executerTest("(1+2)*6", 18);
+    executerTest("3+(4*2)", 11);
+    executerTest("(4+2)*(6+1)", 42);
+    executerTest("(4*12)+3*1*6+3", 69);
 
     // Tests invalides (doivent être rejetés)
-    runTest("+3", 0, true);
-    runTest("3+", 0, true);
-    runTest("()", 0, true);
-    runTest("(3+5", 0, true);
-    runTest("3++5", 0, true);
-    runTest("3*/5", 0, true);
-    runTest("abc+3", 0, true);
+    executerTest("+3", 0, true);
+    executerTest("3+", 0, true);
+    executerTest("()", 0, true);
+    executerTest("(3+5", 0, true);
+    executerTest("3++5", 0, true);
+    executerTest("3*/5", 0, true);
+    executerTest("abc+3", 0, true);
+    executerTest("3-2", 0, true);
 
     return 0;
 }
