@@ -7,7 +7,7 @@ using namespace std;
 
 int main(void)
 {
-   string chaine("(1+2)*6");
+   string chaine("(1+2)*3+4*5");
 
    Lexer l(chaine);
 

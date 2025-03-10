@@ -10,12 +10,21 @@ Automate::Automate(string flux) : lexer(new Lexer(flux)), expressionAcceptee(fal
     pileEtats.push_back(etat0);
 }
 
-void Automate::lancerProg()
+bool Automate::lancerProg()
 {
-    // Démarre l'analyse syntaxique et l'évaluation de l'expression
-    evaluer();
+    evaluer(false); // Analyse et évaluation de l'expression
 
-    // Après l'évaluation, on peut afficher le résultat final
+    if (isExpressionAcceptee()) // Si l'expression est valide
+    {
+        afficherResultat();
+        return true; // Indique que l'expression est correcte
+    }
+
+    return false; // Indique une erreur de syntaxe
+}
+
+void Automate::afficherResultat()
+{
     if (!pileSymboles.empty())
     {
         Symbole *resultat = pileSymboles.back();
@@ -24,13 +33,14 @@ void Automate::lancerProg()
             Expr *exprResultat = dynamic_cast<Expr *>(resultat);
             if (exprResultat)
             {
-                // Évalue l'expression avec un ensemble vide de variables (puisqu'il n'y en a pas dans ce cas)
                 map<string, double> valeurs;
                 double valeurFinale = exprResultat->eval(valeurs);
                 cout << "Le résultat de l'expression est : " << valeurFinale << endl;
+                return;
             }
         }
     }
+    cout << "Erreur : impossible d'évaluer l'expression." << endl;
 }
 
 void Automate::decalage(Symbole *s, Etat *e)
@@ -68,39 +78,46 @@ void Automate::reduction(int n, Symbole *s)
     }
 }
 
-void Automate::evaluer()
+void Automate::evaluer(bool debug)
 {
     bool retourTransition = true;
 
     while (retourTransition)
     {
         Symbole *symbole = lexer->Consulter();
-        cout << "Symbole courant : ";
-        symbole->Affiche();
-        cout << endl;
-
-        cout << "Etat actuel : " << pileEtats.back()->etat() << endl;
-
-        cout << "Pile des symboles : ";
-        for (Symbole *s : pileSymboles)
+        if (debug)
         {
-            s->Affiche();
-            cout << " ";
-        }
-        cout << endl;
+            cout << "Symbole courant : ";
+            symbole->Affiche();
+            cout << endl;
 
-        cout << "Pile des états : ";
-        for (Etat *e : pileEtats)
-        {
-            cout << e->etat() << " ";
+            cout << "Etat actuel : " << pileEtats.back()->etat() << endl;
+
+            cout << "Pile des symboles : ";
+            for (Symbole *s : pileSymboles)
+            {
+                s->Affiche();
+                cout << " ";
+            }
+            cout << endl;
+
+            cout << "Pile des états : ";
+            for (Etat *e : pileEtats)
+            {
+                cout << e->etat() << " ";
+            }
+            cout << endl;
         }
-        cout << endl;
 
         retourTransition = pileEtats.back()->transition(*this, symbole);
 
-        if (!retourTransition && !isExpressionAcceptee())
+        if (!retourTransition)
         {
-            cout << "Erreur de syntaxe, arrêt de l'automate." << endl;
+            if (!isExpressionAcceptee()) // Si l'expression est invalide
+            {
+                cout << "Erreur de syntaxe, arrêt de l'automate." << endl;
+                expressionAcceptee = false; // Arrête immédiatement avec un code d'erreur
+            }
             break;
         }
     }
@@ -111,7 +128,8 @@ void Automate::evaluer()
 void Automate::accepter()
 {
     cout << "L'expression est correcte" << endl;
-    expressionAcceptee = true; // Marque l'expression comme acceptée
+    expressionAcceptee = true;
+    afficherResultat();
 }
 
 Symbole *Automate::popSymbole()

@@ -18,7 +18,7 @@ private:
 public:
     Automate(string flux);
     ~Automate();
-    void evaluer();
+    void evaluer(bool debug);
     void decalage(Symbole *s, Etat *e);
     void reduction(int n, Symbole *s);
     void transitionSimple(Symbole *s, Etat *e);
@@ -26,7 +26,9 @@ public:
     void accepter();
     void setExpressionAcceptee(bool status) { expressionAcceptee = status; }
     bool isExpressionAcceptee() const { return expressionAcceptee; }
-    void lancerProg();
+    bool lancerProg();
+    void afficherResultat();
+
     Symbole *popSymbole();
     void popEtDetruireSymbole();
 

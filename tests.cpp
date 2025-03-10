@@ -8,15 +8,21 @@ void executerTest(string expression, double valeurAttendue, bool doitEchouer = f
     cout << "Test en cours: " << expression << endl;
 
     Automate automate(expression);
-    automate.lancerProg();
+    bool resultat = automate.lancerProg(); // Récupère le résultat de l'analyse
 
     if (doitEchouer)
     {
-        cout << "ATTENDU: Erreur de syntaxe\n";
+        if (!resultat)
+            cout << " ATTENDU: Erreur de syntaxe" << endl;
+        else
+            cout << "ERREUR: Expression acceptée alors qu'elle devrait échouer !" << endl;
     }
     else
     {
-        cout << "ATTENDU: " << valeurAttendue << endl;
+        if (resultat)
+            cout << " ATTENDU: " << valeurAttendue << endl;
+        else
+            cout << "ERREUR: Expression invalide alors qu'elle devrait être correcte !" << endl;
     }
     cout << "=========================\n";
 }

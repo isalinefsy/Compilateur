@@ -41,7 +41,7 @@ bool Etat0::transition(Automate &automate, Symbole *s)
         automate.transitionSimple(s, new Etat1);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E0 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -61,7 +61,7 @@ bool Etat1::transition(Automate &automate, Symbole *s)
         automate.accepter();
         return false; // On retourne false pour sortir de la boucle d'évaluation
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E1 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -81,7 +81,7 @@ bool Etat2::transition(Automate &automate, Symbole *s)
         automate.transitionSimple(s, new Etat6);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E2 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -109,7 +109,7 @@ bool Etat3::transition(Automate &automate, Symbole *s)
         break;
     }
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E3 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -129,7 +129,7 @@ bool Etat4::transition(Automate &automate, Symbole *s)
         automate.transitionSimple(s, new Etat7);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E4 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -149,7 +149,7 @@ bool Etat5::transition(Automate &automate, Symbole *s)
         automate.transitionSimple(s, new Etat8);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E5 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -169,7 +169,7 @@ bool Etat6::transition(Automate &automate, Symbole *s)
         automate.decalage(s, new Etat9);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E6 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -211,7 +211,7 @@ bool Etat7::transition(Automate &automate, Symbole *s)
         automate.decalage(s, new Etat5);
         break;
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E7 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -254,7 +254,7 @@ bool Etat8::transition(Automate &automate, Symbole *s)
         break;
     }
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E8 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
@@ -297,7 +297,7 @@ bool Etat9::transition(Automate &automate, Symbole *s)
         break;
     }
     default:
-        cout << "Erreur de syntaxe" << endl;
+        cout << "Erreur de syntaxe dans l'état E9 : caractère inattendu '" << Etiquettes[*s] << "'" << endl;
         return false;
     }
     return true;
