@@ -59,7 +59,7 @@ Le document [TP Compil-2024-Anglais.pdf]​ présente le contexte et les spécif
 Pour compiler le programme principal, ouvrez un terminal dans le répertoire du projet et exécutez la commande suivante :
 
 ```sh
-g++ -std=c++11 -o main main.cpp lexer.cpp symbole.cpp automate.cpp etat.cpp
+make
 ```
 
 #### Compilation des Tests
@@ -67,20 +67,26 @@ g++ -std=c++11 -o main main.cpp lexer.cpp symbole.cpp automate.cpp etat.cpp
 Pour compiler la suite de tests, utilisez la commande :
 
 ```sh
-g++ -std=c++11 -o tests tests.cpp lexer.cpp symbole.cpp automate.cpp etat.cpp
+make tests
 ```
-
-Si vous préférez utiliser un Makefile, vous pouvez configurer des cibles pour compiler `main` et `tests` en un seul coup.
 
 ### Exécution
 
 #### Exécution du Programme Principal
 
-Pour lancer le programme principal, tapez :
+Pour lancer le programme principal, utiliser la commande :
 
 ```sh
-./main
+./bin/compilateur
 ```
+
+ou
+
+```sh
+valgrind ./bin/compilateur
+```
+
+Si vous souhaitez vérifier la gestion de la mémoire (sous Linux).
 
 Ce programme effectue les opérations suivantes :
 
@@ -88,25 +94,37 @@ Ce programme effectue les opérations suivantes :
 - Initialise et lance l'automate pour analyser et évaluer l'expression.
 - Affiche le résultat de l'expression évaluée.
 
-Note : Le programme principal contient un `sleep(100)` afin de maintenir la fenêtre active sous Unix. Vous pouvez ajuster ou supprimer cet appel selon vos besoins.
-
 #### Exécution des Tests
 
-Pour exécuter la suite de tests, utilisez :
+Pour exécuter la suite de tests, utilisez la commande :
 
 ```sh
-./tests
+./bin/tests
 ```
+
+ou
+
+```sh
+valgrind ./bin/tests
+```
+
+Si vous souhaitez vérifier la gestion de la mémoire (sous Linux).
 
 Les tests implémentés dans `tests.cpp` comprennent :
 
 - **Tests valides** :
   - `"3+5"` doit être évalué à `8`
+  - `"3 + 5"` doit être évalué à `8`
   - `"2*3"` doit être évalué à `6`
   - `"(1+2)*6"` doit être évalué à `18`
   - `"3+(4*2)"` doit être évalué à `11`
   - `"(4+2)*(6+1)"` doit être évalué à `42`
   - `"(4*12)+3*1*6+3"` doit être évalué à `69`
+  - `"3"` doit être évalué à `3`
+  - `"         5  "` doit être évalué à `5`
+  - `"(3)"` doit être évalué à `3`
+  - `"((3))"` doit être évalué à `3`
+  - `"((3)+2)"` doit être évalué à `5`
 - **Tests invalides (détectés comme erreurs de syntaxe)** :
   - `"+3"`
   - `"3+"`
@@ -116,22 +134,17 @@ Les tests implémentés dans `tests.cpp` comprennent :
   - `"3*/5"`
   - `"abc+3"`
   - `"3-2"`
+  - `"6*"`
+  - `"*6"`
+  - `""`
 
 Chaque test affiche dans le terminal si l'expression a été acceptée ou rejetée, et dans le cas d'une expression correcte, le résultat calculé est affiché.
 
 ### Remarques
 
-#### Documentation Complémentaire
-
-Pour plus de détails sur la spécification du TP et sur la grammaire utilisée, reportez-vous au document [TP Compil-2024-Anglais.pdf]​.
-
 #### Gestion des Erreurs
 
 L'automate affiche directement des messages d'erreur en cas de problème de syntaxe lors de l'analyse de l'expression.
-
-#### Structure du Code
-
-Le projet est structuré de manière modulaire avec une séparation claire entre la gestion lexicale, la gestion de l'automate (états et transitions) et l'évaluation d'expressions.
 
 ### Auteurs
 

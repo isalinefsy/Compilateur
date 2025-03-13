@@ -1,11 +1,15 @@
 #include "automate.h"
 #include <iostream>
-#include "etat.h" // Include the header file where Etat0 is defined
+#include "etat.h"
 
 using namespace std;
 
-Automate::Automate(string flux) : lexer(new Lexer(flux)), expressionAcceptee(false)
+Automate::Automate(string flux) : expressionAcceptee(false)
 {
+    // Supprimer les espaces de la chaîne de caractères d'entrée
+    flux.erase(remove(flux.begin(), flux.end(), ' '), flux.end());
+    this->lexer = new Lexer(flux);
+
     Etat *etat0 = new Etat0();
     pileEtats.push_back(etat0);
 }
