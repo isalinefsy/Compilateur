@@ -135,4 +135,4 @@ Le projet est structuré de manière modulaire avec une séparation claire entre
 
 ### Auteurs
 
-Isaline et Pierrick
+Isaline Foissey et Pierrick Brossat
