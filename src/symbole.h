@@ -26,6 +26,7 @@ public:
    virtual ~Symbole() {}
    operator int() const { return ident; }
    virtual void Affiche();
+   int getType() const { return ident; }
 
 protected:
    int ident;
@@ -37,6 +38,7 @@ public:
    Entier(int v) : Symbole(INT), valeur(v) {}
    ~Entier() {}
    virtual void Affiche();
+   int getValeur() const { return valeur; }
 
 protected:
    int valeur;
@@ -48,6 +50,25 @@ public:
    Expr() : Symbole(EXPR) {}
    virtual ~Expr() {}
    virtual double eval(const map<string, double> &valeurs) const = 0;
+};
+
+class ExprEntier : public Expr
+{
+public:
+   ExprEntier(int v) : valeur(v) {}
+   double eval(const std::map<std::string, double> &valeurs) const override
+   {
+      (void)valeurs;
+      return valeur;
+   }
+
+   void Affiche() override
+   {
+      cout << valeur;
+   }
+
+private:
+   int valeur;
 };
 
 class ExprPlus : public Expr

@@ -13,6 +13,7 @@ public:
 
    Symbole *Consulter();
    void Avancer();
+   void avancerSansSuppression();
 
 protected:
    string flux;

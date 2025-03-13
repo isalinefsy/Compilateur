@@ -5,27 +5,35 @@
 #include <vector>
 #include "lexer.h"
 #include "symbole.h"
+using namespace std;
 
-// Déclaration anticipée de la classe Etat
 class Etat;
 
 class Automate
 {
+
+private:
+    bool expressionAcceptee;
+
 public:
-    Automate(std::string flux);
+    Automate(string flux);
     ~Automate();
-    void evaluer();
+    void evaluer(bool debug);
     void decalage(Symbole *s, Etat *e);
     void reduction(int n, Symbole *s);
     void transitionSimple(Symbole *s, Etat *e);
     void calcul();
     void accepter();
+    void setExpressionAcceptee(bool status) { expressionAcceptee = status; }
+    bool isExpressionAcceptee() const { return expressionAcceptee; }
+    bool lancerProg();
+    void afficherResultat();
+
     Symbole *popSymbole();
     void popEtDetruireSymbole();
 
-private:
-    std::vector<Symbole *> pileSymboles;
-    std::vector<Etat *> pileEtats;
+    vector<Symbole *> pileSymboles;
+    vector<Etat *> pileEtats;
     Lexer *lexer;
     Symbole *symboleCourant;
 };
